@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2학년 영어 수행평가 성적 확인</title>
+    <title>영어 수행평가 성적 확인</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -39,7 +39,7 @@
             </div>
             <i class="fas fa-clipboard-check text-5xl mb-3 opacity-95"></i>
             <h1 class="text-2xl font-bold tracking-tight">수행평가 성적 확인</h1>
-            <p class="text-blue-100 text-sm mt-1.5 font-medium">2026학년도 2학년 1학기 영어</p>
+            <p class="text-blue-100 text-sm mt-1.5 font-medium">2026학년도 1학기 영어</p>
         </div>
 
         <!-- 1단계: 본인 확인 (생년월일) 영역 -->
@@ -51,13 +51,23 @@
             </div>
             <form id="verify-form" class="space-y-4">
                 <div>
+                    <label for="grade-select" class="block text-sm font-semibold text-gray-700 mb-1.5">학년</label>
+                    <div class="relative">
+                        <select id="grade-select" class="w-full pl-4 pr-10 py-3.5 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <option value="" disabled selected>학년을 선택해주세요</option>
+                            <option value="2">2학년</option>
+                            <option value="3">3학년</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
                     <label for="class-select" class="block text-sm font-semibold text-gray-700 mb-1.5">반</label>
                     <div class="relative">
-                        <select id="class-select" class="w-full pl-4 pr-10 py-3.5 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
-                            <option value="" disabled selected>반을 선택해주세요</option>
-                            <option value="4">2학년 4반</option>
-                            <option value="5">2학년 5반</option>
-                            <option value="6">2학년 6반</option>
+                        <select id="class-select" disabled class="w-full pl-4 pr-10 py-3.5 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                            <option value="" disabled selected>먼저 학년을 선택해주세요</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                             <i class="fas fa-chevron-down text-sm"></i>
@@ -211,7 +221,7 @@
     </div>
     
     <div class="mt-6 text-center text-gray-400 text-xs font-medium">
-        &copy; 2026학년도 2학년 영어과
+        &copy; 2026학년도 영어과
     </div>
 
     <script>
@@ -223,28 +233,33 @@
         
         const studentsData = [
             // --- 2학년 4반 (명렬표 기반 실제 생년월일 반영) ---
-            { class: "4", number: "1", name: "강지산", dob: "120808", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
-            { class: "4", number: "2", name: "강태욱", dob: "120427", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "45", r2: "50", rTotal: "95" },
-            { class: "4", number: "3", name: "곽효린", dob: "121015", f1: "18", f2: "30", f3: "20", fTotal: "68", r1: "30", r2: "40", rTotal: "70" },
-            { class: "4", number: "4", name: "김건희", dob: "100517", f1: "14", f2: "18", f3: "20", fTotal: "52", r1: "30", r2: "30", rTotal: "60" },
-            { class: "4", number: "5", name: "김규민", dob: "120424", f1: "18", f2: "40", f3: "40", fTotal: "98", r1: "50", r2: "50", rTotal: "100" },
-            { class: "4", number: "6", name: "김나린", dob: "120514", f1: "20", f2: "38", f3: "30", fTotal: "88", r1: "40", r2: "40", rTotal: "80" },
+            { grade: "2", class: "4", number: "1", name: "강지산", dob: "120808", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
+            { grade: "2", class: "4", number: "2", name: "강태욱", dob: "120427", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "45", r2: "50", rTotal: "95" },
+            { grade: "2", class: "4", number: "3", name: "곽효린", dob: "121015", f1: "18", f2: "30", f3: "20", fTotal: "68", r1: "30", r2: "40", rTotal: "70" },
+            { grade: "2", class: "4", number: "4", name: "김건희", dob: "100517", f1: "14", f2: "18", f3: "20", fTotal: "52", r1: "30", r2: "30", rTotal: "60" },
+            { grade: "2", class: "4", number: "5", name: "김규민", dob: "120424", f1: "18", f2: "40", f3: "40", fTotal: "98", r1: "50", r2: "50", rTotal: "100" },
+            { grade: "2", class: "4", number: "6", name: "김나린", dob: "120514", f1: "20", f2: "38", f3: "30", fTotal: "88", r1: "40", r2: "40", rTotal: "80" },
             
             // --- 2학년 5반 (확인된 1~6번 데이터) ---
-            { class: "5", number: "1", name: "강민서", dob: "000000", f1: "20", f2: "28", f3: "20", fTotal: "68", r1: "30", r2: "30", rTotal: "60" },
-            { class: "5", number: "2", name: "권다원", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "45", r2: "50", rTotal: "95" },
-            { class: "5", number: "3", name: "김도윤", dob: "000000", f1: "20", f2: "28", f3: "20", fTotal: "68", r1: "30", r2: "30", rTotal: "60" },
-            { class: "5", number: "4", name: "김민석", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "30", r2: "50", rTotal: "80" },
-            { class: "5", number: "5", name: "김수하", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "50", r2: "50", rTotal: "100" },
-            { class: "5", number: "6", name: "김윤별", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "40", r2: "40", rTotal: "80" },
+            { grade: "2", class: "5", number: "1", name: "강민서", dob: "000000", f1: "20", f2: "28", f3: "20", fTotal: "68", r1: "30", r2: "30", rTotal: "60" },
+            { grade: "2", class: "5", number: "2", name: "권다원", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "45", r2: "50", rTotal: "95" },
+            { grade: "2", class: "5", number: "3", name: "김도윤", dob: "000000", f1: "20", f2: "28", f3: "20", fTotal: "68", r1: "30", r2: "30", rTotal: "60" },
+            { grade: "2", class: "5", number: "4", name: "김민석", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "30", r2: "50", rTotal: "80" },
+            { grade: "2", class: "5", number: "5", name: "김수하", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "50", r2: "50", rTotal: "100" },
+            { grade: "2", class: "5", number: "6", name: "김윤별", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "40", r2: "40", rTotal: "80" },
 
             // --- 2학년 6반 (확인된 1~6번 데이터) ---
-            { class: "6", number: "1", name: "강지우", dob: "000000", f1: "20", f2: "40", f3: "20", fTotal: "80", r1: "30", r2: "40", rTotal: "70" },
-            { class: "6", number: "2", name: "김건효", dob: "000000", f1: "전출", f2: "전출", f3: "전출", fTotal: "0", r1: "전출", r2: "전출", rTotal: "0" },
-            { class: "6", number: "3", name: "김도연", dob: "000000", f1: "20", f2: "38", f3: "30", fTotal: "88", r1: "30", r2: "50", rTotal: "80" },
-            { class: "6", number: "4", name: "김라엘", dob: "000000", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
-            { class: "6", number: "5", name: "김민서", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "50", r2: "50", rTotal: "100" },
-            { class: "6", number: "6", name: "김서현", dob: "000000", f1: "20", f2: "36", f3: "30", fTotal: "86", r1: "45", r2: "45", rTotal: "90" }
+            { grade: "2", class: "6", number: "1", name: "강지우", dob: "000000", f1: "20", f2: "40", f3: "20", fTotal: "80", r1: "30", r2: "40", rTotal: "70" },
+            { grade: "2", class: "6", number: "2", name: "김건효", dob: "000000", f1: "전출", f2: "전출", f3: "전출", fTotal: "0", r1: "전출", r2: "전출", rTotal: "0" },
+            { grade: "2", class: "6", number: "3", name: "김도연", dob: "000000", f1: "20", f2: "38", f3: "30", fTotal: "88", r1: "30", r2: "50", rTotal: "80" },
+            { grade: "2", class: "6", number: "4", name: "김라엘", dob: "000000", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
+            { grade: "2", class: "6", number: "5", name: "김민서", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "50", r2: "50", rTotal: "100" },
+            { grade: "2", class: "6", number: "6", name: "김서현", dob: "000000", f1: "20", f2: "36", f3: "30", fTotal: "86", r1: "45", r2: "45", rTotal: "90" },
+
+            // --- 3학년 데이터 (아래 학생들은 임시 데이터입니다) ---
+            // ※ 학생명렬표 3학년.xlsx 파일과 2026학년도 3학년 1학기 수행평가 보조장부 양식(영어).xlsx 파일을 참고하여 아래 형식에 맞게 실제 데이터를 입력해주세요!
+            { grade: "3", class: "1", number: "1", name: "김삼학년", dob: "000000", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
+            { grade: "3", class: "1", number: "2", name: "이삼학년", dob: "000000", f1: "18", f2: "35", f3: "30", fTotal: "83", r1: "40", r2: "45", rTotal: "85" }
         ];
 
         // =====================================================================
@@ -258,16 +273,33 @@
         const step2VerifySection = document.getElementById('step2-verify-section');
         const resultSection = document.getElementById('result-section');
 
+        // [학년 선택 시 반 목록 동적 업데이트]
+        document.getElementById('grade-select').addEventListener('change', function(e) {
+            const classSelect = document.getElementById('class-select');
+            const selectedGrade = e.target.value;
+            
+            classSelect.disabled = false;
+            classSelect.innerHTML = '<option value="" disabled selected>반을 선택해주세요</option>';
+            
+            // 1반부터 6반까지 옵션을 생성합니다. 학교 상황에 맞게 반 개수를 조절할 수 있습니다.
+            const classes = [1, 2, 3, 4, 5, 6]; 
+            
+            classes.forEach(c => {
+                classSelect.innerHTML += `<option value="${c}">${selectedGrade}학년 ${c}반</option>`;
+            });
+        });
+
         // [STEP 1] 본인 확인
         document.getElementById('verify-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const inputGrade = document.getElementById('grade-select').value;
             const inputClass = document.getElementById('class-select').value;
             const inputNum = document.getElementById('student-number').value.trim();
             const inputName = document.getElementById('student-name').value.trim();
             const inputDob = document.getElementById('student-dob').value.trim();
 
-            if (!inputClass || !inputNum || !inputName || !inputDob) {
+            if (!inputGrade || !inputClass || !inputNum || !inputName || !inputDob) {
                 showError('step1', "모든 정보를 입력해주세요.");
                 return;
             }
@@ -277,6 +309,7 @@
             }
 
             const student = studentsData.find(s => 
+                s.grade === inputGrade &&
                 s.class === inputClass && 
                 String(s.number) === String(inputNum) && 
                 s.name === inputName &&
@@ -287,7 +320,7 @@
                 hideError('step1');
                 currentAuthStudent = student;
                 
-                const savedPwd = localStorage.getItem(`pwd_${student.class}_${student.number}`);
+                const savedPwd = localStorage.getItem(`pwd_${student.grade}_${student.class}_${student.number}`);
                 
                 step1Section.classList.add('hidden');
                 
@@ -325,7 +358,7 @@
                 return;
             }
 
-            localStorage.setItem(`pwd_${currentAuthStudent.class}_${currentAuthStudent.number}`, newPwd);
+            localStorage.setItem(`pwd_${currentAuthStudent.grade}_${currentAuthStudent.class}_${currentAuthStudent.number}`, newPwd);
             
             hideError('step2');
             step2SetupSection.classList.add('hidden');
@@ -337,7 +370,7 @@
             e.preventDefault();
             
             const inputPwd = document.getElementById('input-pwd').value.trim();
-            const savedPwd = localStorage.getItem(`pwd_${currentAuthStudent.class}_${currentAuthStudent.number}`);
+            const savedPwd = localStorage.getItem(`pwd_${currentAuthStudent.grade}_${currentAuthStudent.class}_${currentAuthStudent.number}`);
 
             if (!inputPwd) {
                 showError('step3', "비밀번호를 입력해주세요.");
@@ -370,7 +403,7 @@
 
         // 결과 화면(성적표) 표시
         function displayResults(student) {
-            document.getElementById('res-class').innerText = `2학년 ${student.class}반`;
+            document.getElementById('res-class').innerText = `${student.grade}학년 ${student.class}반`;
             document.getElementById('res-number').innerText = `${student.number}번`;
             document.getElementById('res-name').innerText = student.name;
 
@@ -402,7 +435,11 @@
             step1Section.classList.add('fade-in');
             
             // 입력창 초기화
-            document.getElementById('class-select').value = '';
+            document.getElementById('grade-select').value = '';
+            const classSelect = document.getElementById('class-select');
+            classSelect.value = '';
+            classSelect.disabled = true;
+            classSelect.innerHTML = '<option value="" disabled selected>먼저 학년을 선택해주세요</option>';
             document.getElementById('student-number').value = '';
             document.getElementById('student-name').value = '';
             document.getElementById('student-dob').value = '';
