@@ -1,459 +1,311 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>영어 수행평가 성적 확인</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #e2e8f0; /* 배경색: 좀 더 안정적인 회파란색으로 변경 */
-        }
-        .fade-in {
-            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* 번호 입력창 스피너 제거 */
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+import React, { useState } from 'react';
+import { User, Calendar, LogOut, Award, AlertCircle, BookOpen } from 'lucide-react';
 
-    <!-- 메인 카드 -->
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden fade-in border border-gray-100">
-        
-        <!-- 헤더 영역 -->
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-7 text-center text-white relative overflow-hidden">
-            <div class="absolute top-0 right-0 opacity-10 transform translate-x-4 -translate-y-4">
-                <i class="fas fa-award text-9xl"></i>
+// 제공된 이미지 데이터를 바탕으로 구축된 학생 데이터셋
+const studentData = [
+  // 4반
+  { id: "20401", name: "강지산", dob: "20120808", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20402", name: "강태욱", dob: "20120427", f1: "20", f2: "40", f3: "40", fT: "100", r1: "45", r2: "50", rT: "95" },
+  { id: "20403", name: "곽효린", dob: "20121015", f1: "18", f2: "30", f3: "20", fT: "68", r1: "30", r2: "40", rT: "70" },
+  { id: "20404", name: "김건희", dob: "20100517", f1: "14", f2: "18", f3: "20", fT: "52", r1: "30", r2: "30", rT: "60" },
+  { id: "20405", name: "김규민", dob: "20120424", f1: "18", f2: "40", f3: "40", fT: "98", r1: "50", r2: "50", rT: "100" },
+  { id: "20406", name: "김나린", dob: "20120514", f1: "20", f2: "38", f3: "40", fT: "98", r1: "35", r2: "50", rT: "85" },
+  { id: "20407", name: "김도영", dob: "20120702", f1: "20", f2: "40", f3: "30", fT: "90", r1: "35", r2: "45", rT: "80" },
+  { id: "20408", name: "김동연", dob: "20120206", f1: "20", f2: "40", f3: "30", fT: "90", r1: "45", r2: "50", rT: "95" },
+  { id: "20409", name: "김세은", dob: "20120222", f1: "20", f2: "34", f3: "20", fT: "74", r1: "30", r2: "35", rT: "65" },
+  { id: "20410", name: "김유주", dob: "20120708", f1: "20", f2: "40", f3: "40", fT: "100", r1: "40", r2: "50", rT: "90" },
+  { id: "20411", name: "김윤서", dob: "20120709", f1: "20", f2: "36", f3: "30", fT: "86", r1: "40", r2: "50", rT: "90" },
+  { id: "20412", name: "김윤준", dob: "20120725", f1: "20", f2: "38", f3: "40", fT: "98", r1: "45", r2: "35", rT: "80" },
+  { id: "20413", name: "김태우", dob: "20120218", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20414", name: "박보민", dob: "20120517", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20415", name: "박세은", dob: "20120615", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20416", name: "박아인", dob: "20121127", f1: "20", f2: "40", f3: "20", fT: "80", r1: "50", r2: "50", rT: "100" },
+  { id: "20417", name: "서휘찬", dob: "20120314", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20418", name: "석우진", dob: "20120309", f1: "18", f2: "40", f3: "30", fT: "88", r1: "40", r2: "45", rT: "85" },
+  { id: "20419", name: "손채영", dob: "20120709", f1: "20", f2: "38", f3: "30", fT: "88", r1: "35", r2: "50", rT: "85" },
+  { id: "20420", name: "송도규", dob: "20120313", f1: "20", f2: "34", f3: "30", fT: "84", r1: "45", r2: "40", rT: "85" },
+  { id: "20421", name: "오시윤", dob: "20121123", f1: "20", f2: "36", f3: "20", fT: "76", r1: "30", r2: "40", rT: "70" },
+  { id: "20422", name: "이동윤", dob: "20120928", f1: "18", f2: "28", f3: "30", fT: "76", r1: "40", r2: "30", rT: "70" },
+  { id: "20423", name: "정민지", dob: "20121022", f1: "20", f2: "38", f3: "30", fT: "88", r1: "30", r2: "45", rT: "75" },
+  { id: "20424", name: "정은율", dob: "20120813", f1: "20", f2: "34", f3: "30", fT: "84", r1: "30", r2: "30", rT: "60" },
+  { id: "20426", name: "지승리", dob: "20120727", f1: "20", f2: "40", f3: "40", fT: "100", r1: "45", r2: "50", rT: "95" },
+  { id: "20427", name: "최정혜", dob: "20120327", f1: "20", f2: "36", f3: "30", fT: "86", r1: "30", r2: "30", rT: "60" },
+  { id: "20428", name: "최주하", dob: "20120918", f1: "20", f2: "36", f3: "30", fT: "86", r1: "30", r2: "40", rT: "70" },
+  { id: "20429", name: "최현서", dob: "20120815", f1: "20", f2: "40", f3: "20", fT: "80", r1: "30", r2: "40", rT: "70" },
+  
+  // 5반
+  { id: "20501", name: "강민서", dob: "20120721", f1: "20", f2: "28", f3: "20", fT: "68", r1: "30", r2: "30", rT: "60" },
+  { id: "20502", name: "권다원", dob: "20121129", f1: "20", f2: "40", f3: "30", fT: "90", r1: "45", r2: "50", rT: "95" },
+  { id: "20503", name: "김도윤", dob: "20120725", f1: "20", f2: "28", f3: "20", fT: "68", r1: "30", r2: "30", rT: "60" },
+  { id: "20504", name: "김민석", dob: "20121207", f1: "20", f2: "40", f3: "30", fT: "90", r1: "30", r2: "50", rT: "80" },
+  { id: "20505", name: "김수하", dob: "20120427", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20506", name: "김윤별", dob: "20120719", f1: "20", f2: "40", f3: "30", fT: "90", r1: "45", r2: "50", rT: "95" },
+  { id: "20508", name: "김주원", dob: "20120305", f1: "20", f2: "40", f3: "20", fT: "80", r1: "50", r2: "50", rT: "100" },
+  { id: "20509", name: "김지현", dob: "20120910", f1: "18", f2: "28", f3: "20", fT: "66", r1: "30", r2: "30", rT: "60" },
+  { id: "20510", name: "김하온", dob: "20120903", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20511", name: "문정윤", dob: "20121015", f1: "20", f2: "34", f3: "20", fT: "74", r1: "30", r2: "45", rT: "75" },
+  { id: "20512", name: "배규빈", dob: "20120912", f1: "20", f2: "40", f3: "40", fT: "100", r1: "45", r2: "50", rT: "95" },
+  { id: "20513", name: "백은호", dob: "20121004", f1: "20", f2: "40", f3: "20", fT: "80", r1: "35", r2: "50", rT: "85" },
+  { id: "20514", name: "송주아", dob: "20120107", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20515", name: "송채린", dob: "20120723", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20516", name: "엄서현", dob: "20120215", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20517", name: "오한율", dob: "20120521", f1: "20", f2: "38", f3: "20", fT: "78", r1: "30", r2: "30", rT: "60" },
+  { id: "20518", name: "유동윤", dob: "20120226", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20519", name: "이준영", dob: "20121219", f1: "20", f2: "36", f3: "30", fT: "86", r1: "50", r2: "50", rT: "100" },
+  { id: "20520", name: "이채완", dob: "20121121", f1: "18", f2: "40", f3: "40", fT: "98", r1: "45", r2: "50", rT: "95" },
+  { id: "20521", name: "임소윤", dob: "20120313", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20522", name: "임지혁", dob: "20120210", f1: "20", f2: "40", f3: "30", fT: "90", r1: "45", r2: "50", rT: "95" },
+  { id: "20523", name: "장민준", dob: "20120719", f1: "20", f2: "38", f3: "20", fT: "78", r1: "35", r2: "35", rT: "70" },
+  { id: "20524", name: "조율", dob: "20120728", f1: "20", f2: "40", f3: "40", fT: "100", r1: "40", r2: "50", rT: "90" },
+  { id: "20525", name: "최수연", dob: "20120521", f1: "16", f2: "28", f3: "20", fT: "64", r1: "30", r2: "30", rT: "60" },
+  { id: "20526", name: "최여주", dob: "20120105", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20527", name: "최준영", dob: "20120401", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20528", name: "최지원", dob: "20121010", f1: "20", f2: "40", f3: "20", fT: "80", r1: "50", r2: "50", rT: "100" },
+
+  // 6반
+  { id: "20601", name: "강지우", dob: "20120523", f1: "20", f2: "40", f3: "20", fT: "80", r1: "30", r2: "40", rT: "70" },
+  { id: "20603", name: "김도연", dob: "20121026", f1: "20", f2: "38", f3: "30", fT: "88", r1: "30", r2: "50", rT: "80" },
+  { id: "20604", name: "김라엘", dob: "20120725", f1: "20", f2: "40", f3: "40", fT: "100", r1: "50", r2: "50", rT: "100" },
+  { id: "20605", name: "김민서", dob: "20120223", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20606", name: "김서현", dob: "20120616", f1: "20", f2: "36", f3: "30", fT: "86", r1: "50", r2: "50", rT: "100" },
+  { id: "20607", name: "김태린", dob: "20120216", f1: "20", f2: "40", f3: "20", fT: "80", r1: "30", r2: "35", rT: "65" },
+  { id: "20608", name: "김하은", dob: "20120906", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20609", name: "김현민", dob: "20120802", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20610", name: "나고은", dob: "20121205", f1: "20", f2: "40", f3: "30", fT: "90", r1: "40", r2: "50", rT: "90" },
+  { id: "20611", name: "문다혜", dob: "20120106", f1: "14", f2: "40", f3: "20", fT: "74", r1: "30", r2: "40", rT: "70" },
+  { id: "20612", name: "문성준", dob: "20120615", f1: "20", f2: "40", f3: "20", fT: "80", r1: "30", r2: "30", rT: "60" },
+  { id: "20613", name: "배세영", dob: "20120608", f1: "20", f2: "40", f3: "30", fT: "90", r1: "45", r2: "50", rT: "95" },
+  { id: "20614", name: "서하윤", dob: "20120228", f1: "20", f2: "36", f3: "20", fT: "76", r1: "50", r2: "50", rT: "100" },
+  { id: "20615", name: "손지혁", dob: "20120318", f1: "20", f2: "40", f3: "30", fT: "90", r1: "40", r2: "50", rT: "90" },
+  { id: "20616", name: "양우진", dob: "20121122", f1: "16", f2: "34", f3: "20", fT: "70", r1: "30", r2: "30", rT: "60" },
+  { id: "20617", name: "유예준", dob: "20120902", f1: "20", f2: "38", f3: "20", fT: "78", r1: "35", r2: "50", rT: "85" },
+  { id: "20618", name: "유재원", dob: "20120327", f1: "18", f2: "38", f3: "20", fT: "76", r1: "30", r2: "30", rT: "60" },
+  { id: "20619", name: "윤이삭", dob: "20120605", f1: "20", f2: "38", f3: "40", fT: "98", r1: "45", r2: "50", rT: "95" },
+  { id: "20620", name: "이서준", dob: "20120227", f1: "장기결석", f2: "장기결석", f3: "장기결석", fT: "0", r1: "장기결석", r2: "장기결석", rT: "0" },
+  { id: "20621", name: "이수현", dob: "20120202", f1: "20", f2: "38", f3: "30", fT: "88", r1: "45", r2: "50", rT: "95" },
+  { id: "20622", name: "이태관", dob: "20120727", f1: "20", f2: "38", f3: "30", fT: "88", r1: "30", r2: "30", rT: "60" },
+  { id: "20623", name: "정도영", dob: "20120105", f1: "18", f2: "38", f3: "30", fT: "86", r1: "45", r2: "50", rT: "95" },
+  { id: "20624", name: "정효상", dob: "20120916", f1: "20", f2: "38", f3: "20", fT: "78", r1: "50", r2: "50", rT: "100" },
+  { id: "20625", name: "표지원", dob: "20121221", f1: "20", f2: "36", f3: "30", fT: "86", r1: "30", r2: "45", rT: "75" },
+  { id: "20626", name: "하소이", dob: "20121029", f1: "20", f2: "40", f3: "30", fT: "90", r1: "45", r2: "50", rT: "95" },
+  { id: "20627", name: "하현아", dob: "20120407", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
+  { id: "20628", name: "황서희", dob: "20120309", f1: "20", f2: "40", f3: "40", fT: "100", r1: "45", r2: "50", rT: "95" }
+];
+
+export default function App() {
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [inputId, setInputId] = useState('');
+  const [inputDob, setInputDob] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!inputId || !inputDob) {
+      setError('학번과 생년월일을 모두 입력해주세요.');
+      return;
+    }
+
+    // 학번과 생년월일이 일치하는 학생 찾기
+    const student = studentData.find(s => s.id === inputId.trim() && s.dob === inputDob.trim());
+
+    if (student) {
+      setLoggedInUser(student);
+    } else {
+      setError('입력하신 정보와 일치하는 학생을 찾을 수 없습니다.');
+    }
+  };
+
+  const handleLogout = () => {
+    setLoggedInUser(null);
+    setInputId('');
+    setInputDob('');
+    setError('');
+  };
+
+  if (loggedInUser) {
+    return (
+      <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans flex justify-center items-start">
+        <div className="max-w-4xl w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200 mt-4 md:mt-10">
+          
+          {/* 헤더 섹션 */}
+          <div className="bg-blue-600 p-6 text-white flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold mb-1 flex items-center">
+                <BookOpen className="mr-2" size={24} />
+                2026학년도 2학년 1학기 영어수행평가
+              </h1>
+              <p className="text-blue-100 font-medium">
+                {loggedInUser.id.substring(0,1)}학년 {loggedInUser.id.substring(1,3).replace('0', '')}반 {loggedInUser.id.substring(3,5).replace(/^0/, '')}번 {loggedInUser.name} 학생
+              </p>
             </div>
-            <i class="fas fa-clipboard-check text-5xl mb-3 opacity-95"></i>
-            <h1 class="text-2xl font-bold tracking-tight">수행평가 성적 확인</h1>
-            <p class="text-blue-100 text-sm mt-1.5 font-medium">2026학년도 1학기 영어</p>
+            <button 
+              onClick={handleLogout}
+              className="flex items-center bg-white/20 hover:bg-white/30 transition px-4 py-2 rounded-lg text-sm font-semibold"
+            >
+              <LogOut size={16} className="mr-2" />
+              로그아웃
+            </button>
+          </div>
+
+          {/* 성적표 섹션 */}
+          <div className="p-6">
+            <div className="overflow-x-auto rounded-lg border border-slate-200 shadow-sm">
+              <table className="w-full text-center border-collapse min-w-[800px]">
+                <thead>
+                  <tr className="bg-slate-100 text-slate-700">
+                    <th colSpan="4" className="border-b border-r border-slate-200 py-3 font-bold text-lg bg-indigo-50">
+                      축제 소개하기(20%)
+                    </th>
+                    <th colSpan="3" className="border-b border-slate-200 py-3 font-bold text-lg bg-emerald-50">
+                      한 학기 한 권 읽기(20%)
+                    </th>
+                  </tr>
+                  <tr className="bg-slate-50 text-slate-600 text-sm">
+                    {/* 축제 소개하기 헤더 */}
+                    <th className="border-b border-r border-slate-200 p-3 font-medium w-1/8">
+                      <div className="text-xs text-slate-400 mb-1">1단계</div>
+                      세계 여러 나라의<br/>축제 조사하기<br/>
+                      <span className="text-xs font-normal text-slate-500">(20/18/16/14)</span>
+                    </th>
+                    <th className="border-b border-r border-slate-200 p-3 font-medium w-1/8">
+                      <div className="text-xs text-slate-400 mb-1">2단계</div>
+                      축제 소개글 작성하기<br/>
+                      <span className="text-xs font-normal text-slate-500">(40/38/../18)</span>
+                    </th>
+                    <th className="border-b border-r border-slate-200 p-3 font-medium w-1/8">
+                      <div className="text-xs text-slate-400 mb-1">3단계</div>
+                      축제 소개하는 말하기<br/>
+                      <span className="text-xs font-normal text-slate-500">(40/30/20)</span>
+                    </th>
+                    <th className="border-b border-r border-slate-200 p-3 font-bold text-indigo-700 bg-indigo-50/50 w-1/8">
+                      총점<br/>
+                      <span className="text-xs font-normal">(100)</span>
+                    </th>
+                    
+                    {/* 한 학기 한 권 읽기 헤더 */}
+                    <th className="border-b border-r border-slate-200 p-3 font-medium w-1/8">
+                      <div className="text-xs text-slate-400 mb-1">1단계</div>
+                      맥락 속 어휘 파악<br/>
+                      <span className="text-xs font-normal text-slate-500">(50/45/40/35/30)</span>
+                    </th>
+                    <th className="border-b border-r border-slate-200 p-3 font-medium w-1/8">
+                      <div className="text-xs text-slate-400 mb-1">2단계</div>
+                      책 내용 이해<br/>
+                      <span className="text-xs font-normal text-slate-500">(50/45/40/35/30)</span>
+                    </th>
+                    <th className="border-b border-slate-200 p-3 font-bold text-emerald-700 bg-emerald-50/50 w-1/8">
+                      총점<br/>
+                      <span className="text-xs font-normal">(100)</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="text-slate-800 font-medium">
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="border-r border-slate-200 p-4">{loggedInUser.f1}</td>
+                    <td className="border-r border-slate-200 p-4">{loggedInUser.f2}</td>
+                    <td className="border-r border-slate-200 p-4">{loggedInUser.f3}</td>
+                    <td className="border-r border-slate-200 p-4 text-lg font-bold text-indigo-600 bg-indigo-50/20">{loggedInUser.fT}</td>
+                    
+                    <td className="border-r border-slate-200 p-4">{loggedInUser.r1}</td>
+                    <td className="border-r border-slate-200 p-4">{loggedInUser.r2}</td>
+                    <td className="p-4 text-lg font-bold text-emerald-600 bg-emerald-50/20">{loggedInUser.rT}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="mt-6 p-4 bg-yellow-50 text-yellow-800 rounded-lg border border-yellow-200 text-sm flex items-start">
+              <AlertCircle size={20} className="mr-2 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold mb-1">안내사항</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>성적에 이의가 있는 경우, 이의신청 기간 내에 담당 교사(김수경)에게 문의하시기 바랍니다.</li>
+                  <li>본 시스템은 학생 본인의 성적 확인용으로만 제공됩니다.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 font-sans">
+      <div className="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+        <div className="bg-blue-600 p-8 text-center">
+          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+            <Award className="text-blue-600" size={32} />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">영어 수행평가 성적조회</h1>
+          <p className="text-blue-100 text-sm">2026학년도 2학년 1학기</p>
         </div>
 
-        <!-- 1단계: 본인 확인 (생년월일) 영역 -->
-        <div id="step1-section" class="p-7">
-            <div class="mb-5 text-center">
-                <span class="inline-block bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded-full font-bold tracking-wide">STEP 1</span>
-                <h2 class="text-xl font-bold text-gray-800 mt-2">본인 확인</h2>
-                <p class="text-sm text-gray-500 mt-1">학생 정보를 정확히 입력해주세요.</p>
+        <div className="p-8">
+          <form onSubmit={handleLogin} className="space-y-6">
+            
+            {error && (
+              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center border border-red-100">
+                <AlertCircle size={16} className="mr-2" />
+                {error}
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="studentId">
+                학번 (5자리)
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="text-slate-400" size={20} />
+                </div>
+                <input
+                  id="studentId"
+                  type="text"
+                  maxLength={5}
+                  placeholder="예: 20401 (2학년 4반 1번)"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                  value={inputId}
+                  onChange={(e) => setInputId(e.target.value.replace(/[^0-9]/g, ''))} // 숫자만 입력 허용
+                />
+              </div>
             </div>
-            <form id="verify-form" class="space-y-4">
-                <div>
-                    <label for="grade-select" class="block text-sm font-semibold text-gray-700 mb-1.5">학년</label>
-                    <div class="relative">
-                        <select id="grade-select" class="w-full pl-4 pr-10 py-3.5 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
-                            <option value="" disabled selected>학년을 선택해주세요</option>
-                            <option value="2">2학년</option>
-                            <option value="3">3학년</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                            <i class="fas fa-chevron-down text-sm"></i>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <label for="class-select" class="block text-sm font-semibold text-gray-700 mb-1.5">반</label>
-                    <div class="relative">
-                        <select id="class-select" disabled class="w-full pl-4 pr-10 py-3.5 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                            <option value="" disabled selected>먼저 학년을 선택해주세요</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                            <i class="fas fa-chevron-down text-sm"></i>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <label for="student-number" class="block text-sm font-semibold text-gray-700 mb-1.5">번호</label>
-                    <input type="number" id="student-number" placeholder="예: 1" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors">
-                </div>
-                <div>
-                    <label for="student-name" class="block text-sm font-semibold text-gray-700 mb-1.5">이름</label>
-                    <input type="text" id="student-name" placeholder="이름을 입력해주세요" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors">
-                </div>
-                <div>
-                    <label for="student-dob" class="block text-sm font-semibold text-gray-700 mb-1.5">생년월일 (6자리)</label>
-                    <input type="text" pattern="\d*" maxlength="6" id="student-dob" placeholder="예: 110505" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors">
-                </div>
 
-                <div id="error-step1" class="hidden bg-red-50 border border-red-100 text-red-600 p-3.5 rounded-xl text-sm flex items-start mt-2">
-                    <i class="fas fa-exclamation-circle mt-0.5 mr-2"></i>
-                    <span id="error-text-step1" class="leading-tight">입력하신 정보와 일치하는 학생이 없습니다.</span>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="studentDob">
+                생년월일 (8자리)
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Calendar className="text-slate-400" size={20} />
                 </div>
-
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg flex justify-center items-center mt-6">
-                    <span>다음 단계로</span>
-                    <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                </button>
-            </form>
-        </div>
-
-        <!-- 2단계: 비밀번호 설정 영역 (최초 접속 시) -->
-        <div id="step2-setup-section" class="hidden p-7">
-            <div class="mb-5 text-center">
-                <span class="inline-block bg-green-50 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold tracking-wide">STEP 2</span>
-                <h2 class="text-xl font-bold text-gray-800 mt-2">비밀번호 설정</h2>
-                <p class="text-sm text-gray-500 mt-1">최초 접속입니다. 앞으로 사용할<br>비밀번호 4자리를 설정해주세요.</p>
+                <input
+                  id="studentDob"
+                  type="text"
+                  maxLength={8}
+                  placeholder="예: 20120808"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                  value={inputDob}
+                  onChange={(e) => setInputDob(e.target.value.replace(/[^0-9]/g, ''))} // 숫자만 입력 허용
+                />
+              </div>
             </div>
-            <form id="setup-pwd-form" class="space-y-4">
-                <div>
-                    <label for="new-pwd" class="block text-sm font-semibold text-gray-700 mb-1.5">새 비밀번호</label>
-                    <input type="password" id="new-pwd" pattern="\d*" maxlength="4" placeholder="숫자 4자리" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-colors text-center text-lg tracking-widest">
-                </div>
-                <div>
-                    <label for="confirm-pwd" class="block text-sm font-semibold text-gray-700 mb-1.5">비밀번호 확인</label>
-                    <input type="password" id="confirm-pwd" pattern="\d*" maxlength="4" placeholder="다시 한 번 입력해주세요" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-colors text-center text-lg tracking-widest">
-                </div>
 
-                <div id="error-step2" class="hidden bg-red-50 border border-red-100 text-red-600 p-3.5 rounded-xl text-sm flex items-start">
-                    <i class="fas fa-exclamation-circle mt-0.5 mr-2"></i>
-                    <span id="error-text-step2" class="leading-tight">비밀번호가 일치하지 않습니다.</span>
-                </div>
-
-                <div class="flex space-x-3 mt-6">
-                    <button type="button" onclick="goBackToStep1()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 px-4 rounded-xl transition-colors">
-                        이전
-                    </button>
-                    <button type="submit" class="w-2/3 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg">
-                        설정 및 확인
-                    </button>
-                </div>
-            </form>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-md hover:shadow-lg mt-4"
+            >
+              성적 확인하기
+            </button>
+          </form>
+          
+          <p className="mt-6 text-center text-xs text-slate-500">
+            * 명부에 없는 학생(전출, 정원외 관리 등)은 조회가 불가능합니다.
+          </p>
         </div>
-
-        <!-- 2단계: 비밀번호 확인 영역 (재접속 시) -->
-        <div id="step2-verify-section" class="hidden p-7">
-            <div class="mb-5 text-center">
-                <span class="inline-block bg-indigo-50 text-indigo-700 text-xs px-2.5 py-1 rounded-full font-bold tracking-wide">STEP 2</span>
-                <h2 class="text-xl font-bold text-gray-800 mt-2">비밀번호 확인</h2>
-                <p class="text-sm text-gray-500 mt-1">본인이 설정한 비밀번호를 입력해주세요.</p>
-            </div>
-            <form id="verify-pwd-form" class="space-y-4">
-                <div>
-                    <label for="input-pwd" class="block text-sm font-semibold text-gray-700 mb-1.5">비밀번호</label>
-                    <input type="password" id="input-pwd" pattern="\d*" maxlength="4" placeholder="비밀번호 4자리 입력" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors text-center text-lg tracking-widest">
-                </div>
-
-                <div id="error-step3" class="hidden bg-red-50 border border-red-100 text-red-600 p-3.5 rounded-xl text-sm flex items-start">
-                    <i class="fas fa-exclamation-circle mt-0.5 mr-2"></i>
-                    <span id="error-text-step3" class="leading-tight">비밀번호가 틀렸습니다.</span>
-                </div>
-
-                <div class="flex space-x-3 mt-6">
-                    <button type="button" onclick="goBackToStep1()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 px-4 rounded-xl transition-colors">
-                        이전
-                    </button>
-                    <button type="submit" class="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg">
-                        성적 확인
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- 3단계: 성적 결과 표시 영역 -->
-        <div id="result-section" class="hidden">
-            <div class="p-7">
-                <!-- 학생 정보 요약 -->
-                <div class="bg-gray-50 rounded-xl p-5 mb-6 flex justify-between items-center border border-gray-200 shadow-sm">
-                    <div>
-                        <span id="res-class" class="text-gray-500 text-sm font-semibold">2학년 X반</span>
-                        <span id="res-number" class="text-gray-500 text-sm font-semibold ml-1">X번</span>
-                        <div id="res-name" class="text-2xl font-bold text-gray-800 mt-1">이름</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs text-gray-500 mb-1 font-semibold">총합계</div>
-                        <div class="text-3xl font-black text-blue-600 tracking-tight"><span id="res-grand-total">0</span><span class="text-base font-medium text-gray-400 ml-1">/ 200</span></div>
-                    </div>
-                </div>
-
-                <!-- 축제 소개하기 영역 -->
-                <div class="mb-7">
-                    <h3 class="text-md font-bold text-gray-800 border-b-2 border-blue-500 pb-2 mb-3 flex items-center">
-                        <i class="fas fa-globe-americas text-blue-500 mr-2 text-lg"></i> 축제 소개하기 (20%)
-                    </h3>
-                    <div class="grid grid-cols-4 gap-2 text-center text-sm">
-                        <div class="bg-gray-100 p-2 rounded-lg text-gray-600 text-xs font-semibold flex flex-col justify-center">1단계<br><span class="font-normal text-[10px] mt-0.5">(조사)</span></div>
-                        <div class="bg-gray-100 p-2 rounded-lg text-gray-600 text-xs font-semibold flex flex-col justify-center">2단계<br><span class="font-normal text-[10px] mt-0.5">(작성)</span></div>
-                        <div class="bg-gray-100 p-2 rounded-lg text-gray-600 text-xs font-semibold flex flex-col justify-center">3단계<br><span class="font-normal text-[10px] mt-0.5">(말하기)</span></div>
-                        <div class="bg-blue-50 p-2 rounded-lg text-blue-800 font-bold flex flex-col justify-center">총점</div>
-                        
-                        <div class="font-medium py-2"><span id="score-f1" class="text-base text-gray-800">0</span><span class="text-[10px] text-gray-400 ml-1">/ 20</span></div>
-                        <div class="font-medium py-2"><span id="score-f2" class="text-base text-gray-800">0</span><span class="text-[10px] text-gray-400 ml-1">/ 40</span></div>
-                        <div class="font-medium py-2"><span id="score-f3" class="text-base text-gray-800">0</span><span class="text-[10px] text-gray-400 ml-1">/ 40</span></div>
-                        <div class="font-bold text-blue-600 py-2 bg-blue-50/50 rounded-lg"><span id="score-f-total" class="text-lg">0</span><span class="text-[10px] text-blue-400 ml-1">/ 100</span></div>
-                    </div>
-                </div>
-
-                <!-- 한 학기 한 권 읽기 영역 -->
-                <div class="mb-7">
-                    <h3 class="text-md font-bold text-gray-800 border-b-2 border-green-500 pb-2 mb-3 flex items-center">
-                        <i class="fas fa-book-open text-green-500 mr-2 text-lg"></i> 한 학기 한 권 읽기 (20%)
-                    </h3>
-                    <div class="grid grid-cols-3 gap-2 text-center text-sm">
-                        <div class="bg-gray-100 p-2 rounded-lg text-gray-600 text-xs font-semibold flex flex-col justify-center">1단계<br><span class="font-normal text-[10px] mt-0.5">(어휘 파악)</span></div>
-                        <div class="bg-gray-100 p-2 rounded-lg text-gray-600 text-xs font-semibold flex flex-col justify-center">2단계<br><span class="font-normal text-[10px] mt-0.5">(내용 이해)</span></div>
-                        <div class="bg-green-50 p-2 rounded-lg text-green-800 font-bold flex flex-col justify-center">총점</div>
-                        
-                        <div class="font-medium py-2"><span id="score-r1" class="text-base text-gray-800">0</span><span class="text-[10px] text-gray-400 ml-1">/ 50</span></div>
-                        <div class="font-medium py-2"><span id="score-r2" class="text-base text-gray-800">0</span><span class="text-[10px] text-gray-400 ml-1">/ 50</span></div>
-                        <div class="font-bold text-green-600 py-2 bg-green-50/50 rounded-lg"><span id="score-r-total" class="text-lg">0</span><span class="text-[10px] text-green-400 ml-1">/ 100</span></div>
-                    </div>
-                </div>
-
-                <!-- 뒤로가기 버튼 -->
-                <button id="back-btn" type="button" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 px-4 rounded-xl transition-colors duration-200 mt-2 flex justify-center items-center">
-                    <i class="fas fa-undo-alt mr-2"></i>
-                    <span>처음으로 돌아가기</span>
-                </button>
-            </div>
-        </div>
+      </div>
     </div>
-    
-    <div class="mt-6 text-center text-gray-400 text-xs font-medium">
-        &copy; 2026학년도 영어과
-    </div>
-
-    <script>
-        // =====================================================================
-        // [데이터 영역] 선생님, 아래의 데이터를 수정하여 학생들을 추가해주세요!
-        // 새로 올려주신 명렬표를 바탕으로 4반 1~6번 학생의 실제 생년월일을 반영했습니다.
-        // (5, 6반 학생 데이터는 파일 미리보기에서 보이지 않아 000000으로 유지했습니다)
-        // =====================================================================
-        
-        const studentsData = [
-            // --- 2학년 4반 (명렬표 기반 실제 생년월일 반영) ---
-            { grade: "2", class: "4", number: "1", name: "강지산", dob: "120808", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
-            { grade: "2", class: "4", number: "2", name: "강태욱", dob: "120427", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "45", r2: "50", rTotal: "95" },
-            { grade: "2", class: "4", number: "3", name: "곽효린", dob: "121015", f1: "18", f2: "30", f3: "20", fTotal: "68", r1: "30", r2: "40", rTotal: "70" },
-            { grade: "2", class: "4", number: "4", name: "김건희", dob: "100517", f1: "14", f2: "18", f3: "20", fTotal: "52", r1: "30", r2: "30", rTotal: "60" },
-            { grade: "2", class: "4", number: "5", name: "김규민", dob: "120424", f1: "18", f2: "40", f3: "40", fTotal: "98", r1: "50", r2: "50", rTotal: "100" },
-            { grade: "2", class: "4", number: "6", name: "김나린", dob: "120514", f1: "20", f2: "38", f3: "30", fTotal: "88", r1: "40", r2: "40", rTotal: "80" },
-            
-            // --- 2학년 5반 (확인된 1~6번 데이터) ---
-            { grade: "2", class: "5", number: "1", name: "강민서", dob: "000000", f1: "20", f2: "28", f3: "20", fTotal: "68", r1: "30", r2: "30", rTotal: "60" },
-            { grade: "2", class: "5", number: "2", name: "권다원", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "45", r2: "50", rTotal: "95" },
-            { grade: "2", class: "5", number: "3", name: "김도윤", dob: "000000", f1: "20", f2: "28", f3: "20", fTotal: "68", r1: "30", r2: "30", rTotal: "60" },
-            { grade: "2", class: "5", number: "4", name: "김민석", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "30", r2: "50", rTotal: "80" },
-            { grade: "2", class: "5", number: "5", name: "김수하", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "50", r2: "50", rTotal: "100" },
-            { grade: "2", class: "5", number: "6", name: "김윤별", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "40", r2: "40", rTotal: "80" },
-
-            // --- 2학년 6반 (확인된 1~6번 데이터) ---
-            { grade: "2", class: "6", number: "1", name: "강지우", dob: "000000", f1: "20", f2: "40", f3: "20", fTotal: "80", r1: "30", r2: "40", rTotal: "70" },
-            { grade: "2", class: "6", number: "2", name: "김건효", dob: "000000", f1: "전출", f2: "전출", f3: "전출", fTotal: "0", r1: "전출", r2: "전출", rTotal: "0" },
-            { grade: "2", class: "6", number: "3", name: "김도연", dob: "000000", f1: "20", f2: "38", f3: "30", fTotal: "88", r1: "30", r2: "50", rTotal: "80" },
-            { grade: "2", class: "6", number: "4", name: "김라엘", dob: "000000", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
-            { grade: "2", class: "6", number: "5", name: "김민서", dob: "000000", f1: "20", f2: "40", f3: "30", fTotal: "90", r1: "50", r2: "50", rTotal: "100" },
-            { grade: "2", class: "6", number: "6", name: "김서현", dob: "000000", f1: "20", f2: "36", f3: "30", fTotal: "86", r1: "45", r2: "45", rTotal: "90" },
-
-            // --- 3학년 데이터 (아래 학생들은 임시 데이터입니다) ---
-            // ※ 학생명렬표 3학년.xlsx 파일과 2026학년도 3학년 1학기 수행평가 보조장부 양식(영어).xlsx 파일을 참고하여 아래 형식에 맞게 실제 데이터를 입력해주세요!
-            { grade: "3", class: "1", number: "1", name: "김삼학년", dob: "000000", f1: "20", f2: "40", f3: "40", fTotal: "100", r1: "50", r2: "50", rTotal: "100" },
-            { grade: "3", class: "1", number: "2", name: "이삼학년", dob: "000000", f1: "18", f2: "35", f3: "30", fTotal: "83", r1: "40", r2: "45", rTotal: "85" }
-        ];
-
-        // =====================================================================
-        // 아래부터는 시스템 로직입니다. 수정하지 않으셔도 됩니다.
-        // =====================================================================
-
-        let currentAuthStudent = null;
-
-        const step1Section = document.getElementById('step1-section');
-        const step2SetupSection = document.getElementById('step2-setup-section');
-        const step2VerifySection = document.getElementById('step2-verify-section');
-        const resultSection = document.getElementById('result-section');
-
-        // [학년 선택 시 반 목록 동적 업데이트]
-        document.getElementById('grade-select').addEventListener('change', function(e) {
-            const classSelect = document.getElementById('class-select');
-            const selectedGrade = e.target.value;
-            
-            classSelect.disabled = false;
-            classSelect.innerHTML = '<option value="" disabled selected>반을 선택해주세요</option>';
-            
-            // 1반부터 6반까지 옵션을 생성합니다. 학교 상황에 맞게 반 개수를 조절할 수 있습니다.
-            const classes = [1, 2, 3, 4, 5, 6]; 
-            
-            classes.forEach(c => {
-                classSelect.innerHTML += `<option value="${c}">${selectedGrade}학년 ${c}반</option>`;
-            });
-        });
-
-        // [STEP 1] 본인 확인
-        document.getElementById('verify-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const inputGrade = document.getElementById('grade-select').value;
-            const inputClass = document.getElementById('class-select').value;
-            const inputNum = document.getElementById('student-number').value.trim();
-            const inputName = document.getElementById('student-name').value.trim();
-            const inputDob = document.getElementById('student-dob').value.trim();
-
-            if (!inputGrade || !inputClass || !inputNum || !inputName || !inputDob) {
-                showError('step1', "모든 정보를 입력해주세요.");
-                return;
-            }
-            if (inputDob.length !== 6) {
-                showError('step1', "생년월일은 6자리 숫자로 입력해주세요. (예: 110505)");
-                return;
-            }
-
-            const student = studentsData.find(s => 
-                s.grade === inputGrade &&
-                s.class === inputClass && 
-                String(s.number) === String(inputNum) && 
-                s.name === inputName &&
-                s.dob === inputDob
-            );
-
-            if (student) {
-                hideError('step1');
-                currentAuthStudent = student;
-                
-                const savedPwd = localStorage.getItem(`pwd_${student.grade}_${student.class}_${student.number}`);
-                
-                step1Section.classList.add('hidden');
-                
-                if (savedPwd) {
-                    step2VerifySection.classList.remove('hidden');
-                    step2VerifySection.classList.add('fade-in');
-                    document.getElementById('input-pwd').focus();
-                } else {
-                    step2SetupSection.classList.remove('hidden');
-                    step2SetupSection.classList.add('fade-in');
-                    document.getElementById('new-pwd').focus();
-                }
-            } else {
-                showError('step1', "입력하신 정보와 일치하는 학생이 없습니다. 다시 확인해주세요.");
-            }
-        });
-
-        // [STEP 2-A] 최초 접속 시 비밀번호 설정
-        document.getElementById('setup-pwd-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const newPwd = document.getElementById('new-pwd').value.trim();
-            const confirmPwd = document.getElementById('confirm-pwd').value.trim();
-
-            if (!newPwd || !confirmPwd) {
-                showError('step2', "비밀번호를 입력해주세요.");
-                return;
-            }
-            if (newPwd.length !== 4) {
-                showError('step2', "비밀번호는 4자리 숫자로 설정해주세요.");
-                return;
-            }
-            if (newPwd !== confirmPwd) {
-                showError('step2', "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
-                return;
-            }
-
-            localStorage.setItem(`pwd_${currentAuthStudent.grade}_${currentAuthStudent.class}_${currentAuthStudent.number}`, newPwd);
-            
-            hideError('step2');
-            step2SetupSection.classList.add('hidden');
-            displayResults(currentAuthStudent);
-        });
-
-        // [STEP 2-B] 재접속 시 비밀번호 확인
-        document.getElementById('verify-pwd-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const inputPwd = document.getElementById('input-pwd').value.trim();
-            const savedPwd = localStorage.getItem(`pwd_${currentAuthStudent.grade}_${currentAuthStudent.class}_${currentAuthStudent.number}`);
-
-            if (!inputPwd) {
-                showError('step3', "비밀번호를 입력해주세요.");
-                return;
-            }
-
-            if (inputPwd === savedPwd) {
-                hideError('step3');
-                step2VerifySection.classList.add('hidden');
-                document.getElementById('input-pwd').value = '';
-                displayResults(currentAuthStudent);
-            } else {
-                showError('step3', "비밀번호가 틀렸습니다.");
-            }
-        });
-
-        // 단계 뒤로가기 함수
-        function goBackToStep1() {
-            step2SetupSection.classList.add('hidden');
-            step2VerifySection.classList.add('hidden');
-            step1Section.classList.remove('hidden');
-            step1Section.classList.add('fade-in');
-            
-            hideError('step2');
-            hideError('step3');
-            document.getElementById('new-pwd').value = '';
-            document.getElementById('confirm-pwd').value = '';
-            document.getElementById('input-pwd').value = '';
-        }
-
-        // 결과 화면(성적표) 표시
-        function displayResults(student) {
-            document.getElementById('res-class').innerText = `${student.grade}학년 ${student.class}반`;
-            document.getElementById('res-number').innerText = `${student.number}번`;
-            document.getElementById('res-name').innerText = student.name;
-
-            // 총합 계산 (전출 처리)
-            if(!isNaN(student.fTotal) && !isNaN(student.rTotal)) {
-                let grandTotal = parseInt(student.fTotal) + parseInt(student.rTotal);
-                document.getElementById('res-grand-total').innerText = grandTotal;
-            } else {
-                document.getElementById('res-grand-total').innerText = "전출";
-            }
-
-            document.getElementById('score-f1').innerText = student.f1;
-            document.getElementById('score-f2').innerText = student.f2;
-            document.getElementById('score-f3').innerText = student.f3;
-            document.getElementById('score-f-total').innerText = student.fTotal;
-
-            document.getElementById('score-r1').innerText = student.r1;
-            document.getElementById('score-r2').innerText = student.r2;
-            document.getElementById('score-r-total').innerText = student.rTotal;
-
-            resultSection.classList.remove('hidden');
-            resultSection.classList.add('fade-in');
-        }
-
-        // 처음으로 돌아가기
-        document.getElementById('back-btn').addEventListener('click', function() {
-            resultSection.classList.add('hidden');
-            step1Section.classList.remove('hidden');
-            step1Section.classList.add('fade-in');
-            
-            // 입력창 초기화
-            document.getElementById('grade-select').value = '';
-            const classSelect = document.getElementById('class-select');
-            classSelect.value = '';
-            classSelect.disabled = true;
-            classSelect.innerHTML = '<option value="" disabled selected>먼저 학년을 선택해주세요</option>';
-            document.getElementById('student-number').value = '';
-            document.getElementById('student-name').value = '';
-            document.getElementById('student-dob').value = '';
-            
-            currentAuthStudent = null;
-        });
-
-        function showError(step, msg) {
-            document.getElementById(`error-text-${step}`).innerText = msg;
-            document.getElementById(`error-${step}`).classList.remove('hidden');
-        }
-        function hideError(step) {
-            document.getElementById(`error-${step}`).classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+  );
+}
