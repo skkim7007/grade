@@ -28,13 +28,13 @@
       </div>
 
       <div class="p-8">
-        <form id="login-form" class="space-y-6">
-          
-          <div id="error-msg" class="hidden bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center border border-red-100">
-            <i data-lucide="alert-circle" class="w-4 h-4 mr-2 flex-shrink-0"></i>
-            <span id="error-text">오류 메시지</span>
-          </div>
+        <div id="error-msg" class="hidden bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center border border-red-100 mb-6">
+          <i data-lucide="alert-circle" class="w-4 h-4 mr-2 flex-shrink-0"></i>
+          <span id="error-text">오류 메시지</span>
+        </div>
 
+        <!-- 1. 학번/생년월일 확인 폼 -->
+        <form id="form-id-dob" class="space-y-6">
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-2" for="studentId">
               학번 (5자리)
@@ -73,10 +73,116 @@
 
           <button
             type="submit"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-md hover:shadow-lg mt-4"
+            id="btn-id-dob"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-md hover:shadow-lg mt-4 flex justify-center items-center"
           >
-            성적 확인하기
+            다음 단계
           </button>
+        </form>
+
+        <!-- 2. 비밀번호 설정 폼 (초기에는 숨김) -->
+        <form id="form-set-pwd" class="space-y-6 hidden">
+          <div class="text-center mb-6">
+            <p class="text-sm text-slate-600">
+              <span id="set-pwd-name" class="font-bold text-blue-600"></span> 학생 환영합니다!<br/>
+              안전한 성적 확인을 위해 <span class="font-semibold text-red-500">비밀번호를 설정</span>해주세요.
+            </p>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2" for="newPassword">
+              새 비밀번호 (4자리 이상)
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i data-lucide="lock" class="text-slate-400 w-5 h-5"></i>
+              </div>
+              <input
+                id="newPassword"
+                type="password"
+                placeholder="비밀번호 입력"
+                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2" for="confirmPassword">
+              비밀번호 확인
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i data-lucide="key-round" class="text-slate-400 w-5 h-5"></i>
+              </div>
+              <input
+                id="confirmPassword"
+                type="password"
+                placeholder="비밀번호 다시 입력"
+                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="flex gap-2 mt-4">
+            <button
+              type="button"
+              onclick="resetForms()"
+              class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 rounded-lg transition-colors"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              id="btn-set-pwd"
+              class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
+            >
+              설정 후 확인
+            </button>
+          </div>
+        </form>
+
+        <!-- 3. 비밀번호 확인 폼 (초기에는 숨김) -->
+        <form id="form-verify-pwd" class="space-y-6 hidden">
+          <div class="text-center mb-6">
+            <p class="text-sm text-slate-600">
+              <span id="verify-pwd-name" class="font-bold text-blue-600"></span> 학생의 성적을 확인하려면<br/>
+              설정한 <span class="font-semibold text-blue-600">비밀번호</span>를 입력해주세요.
+            </p>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2" for="verifyPassword">
+              비밀번호
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i data-lucide="lock" class="text-slate-400 w-5 h-5"></i>
+              </div>
+              <input
+                id="verifyPassword"
+                type="password"
+                placeholder="비밀번호 입력"
+                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="flex gap-2 mt-4">
+            <button
+              type="button"
+              onclick="resetForms()"
+              class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 rounded-lg transition-colors"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              id="btn-verify-pwd"
+              class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
+            >
+              성적 확인하기
+            </button>
+          </div>
         </form>
         
         <p class="mt-6 text-center text-xs text-slate-500">
@@ -195,6 +301,11 @@
     // 아이콘 렌더링
     lucide.createIcons();
 
+    // =================================================================
+    // 연결된 구글 앱스 스크립트 웹 앱 URL
+    // =================================================================
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqnC0V41fOuTOIxufm-vt0Pe5DU23HWj3ELbFIjzyqBb-6UW-HJvBqeXCHKTCXf7zA/exec"; 
+
     // 학생 데이터셋
     const studentData = [
       // 4반
@@ -286,15 +397,33 @@
       { id: "20628", name: "황서희", dob: "20120309", f1: "20", f2: "40", f3: "40", fT: "100", r1: "45", r2: "50", rT: "95" }
     ];
 
+    // 상태 관리용 변수
+    let tempStudent = null;
+
     // DOM 요소 가져오기
     const loginSection = document.getElementById('login-section');
     const resultSection = document.getElementById('result-section');
-    const loginForm = document.getElementById('login-form');
+    
+    const formIdDob = document.getElementById('form-id-dob');
+    const formSetPwd = document.getElementById('form-set-pwd');
+    const formVerifyPwd = document.getElementById('form-verify-pwd');
+    
     const inputId = document.getElementById('studentId');
     const inputDob = document.getElementById('studentDob');
+    const inputNewPwd = document.getElementById('newPassword');
+    const inputConfirmPwd = document.getElementById('confirmPassword');
+    const inputVerifyPwd = document.getElementById('verifyPassword');
+    
+    const btnIdDob = document.getElementById('btn-id-dob');
+    const btnSetPwd = document.getElementById('btn-set-pwd');
+    const btnVerifyPwd = document.getElementById('btn-verify-pwd');
+
     const errorMsg = document.getElementById('error-msg');
     const errorText = document.getElementById('error-text');
     const logoutBtn = document.getElementById('logout-btn');
+
+    const setPwdName = document.getElementById('set-pwd-name');
+    const verifyPwdName = document.getElementById('verify-pwd-name');
 
     // 성적 표시용 DOM 요소
     const studentInfo = document.getElementById('student-info');
@@ -307,15 +436,46 @@
     const srT = document.getElementById('score-rT');
 
     // 숫자만 입력 가능하도록 제어
-    inputId.addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
-    });
-    inputDob.addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
-    });
+    inputId.addEventListener('input', function(e) { this.value = this.value.replace(/[^0-9]/g, ''); });
+    inputDob.addEventListener('input', function(e) { this.value = this.value.replace(/[^0-9]/g, ''); });
 
-    // 폼 제출(로그인) 처리
-    loginForm.addEventListener('submit', function(e) {
+    // 에러 메시지 표시/숨기기
+    function showError(message) {
+      errorText.textContent = message;
+      errorMsg.classList.remove('hidden');
+    }
+    function hideError() {
+      errorMsg.classList.add('hidden');
+    }
+
+    // 폼 초기화 및 첫 화면으로
+    function resetForms() {
+      hideError();
+      tempStudent = null;
+      inputNewPwd.value = '';
+      inputConfirmPwd.value = '';
+      inputVerifyPwd.value = '';
+      
+      formSetPwd.classList.add('hidden');
+      formVerifyPwd.classList.add('hidden');
+      formIdDob.classList.remove('hidden');
+    }
+
+    // 로딩 상태(스피너) 토글
+    function toggleLoading(btnElement, isLoading, originalText = '') {
+      if (isLoading) {
+        btnElement.disabled = true;
+        btnElement.dataset.originalText = btnElement.innerText;
+        btnElement.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin mr-2"></i> 통신 중...`;
+        lucide.createIcons();
+      } else {
+        btnElement.disabled = false;
+        btnElement.innerText = btnElement.dataset.originalText || originalText;
+      }
+    }
+
+    // 1단계: 학번/생년월일 확인 
+    formIdDob.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const idValue = inputId.value.trim();
@@ -325,63 +485,137 @@
         showError('학번과 생년월일을 모두 입력해주세요.');
         return;
       }
+      
+      if (APPS_SCRIPT_URL === "여기에_앱스크립트_웹앱_URL을_붙여넣으세요") {
+         showError('안내: 소스 코드에 앱스크립트 URL이 입력되지 않았습니다.');
+         return;
+      }
 
-      // 학생 찾기
       const student = studentData.find(s => s.id === idValue && s.dob === dobValue);
 
       if (student) {
-        showResult(student);
+        tempStudent = student;
+        hideError();
+        toggleLoading(btnIdDob, true);
+
+        try {
+          // 앱스크립트 서버에 비밀번호 설정 여부 확인
+          const response = await fetch(`${APPS_SCRIPT_URL}?action=check&studentId=${idValue}`);
+          const data = await response.json();
+          
+          formIdDob.classList.add('hidden');
+          
+          if (data.hasPassword) {
+            verifyPwdName.textContent = student.name;
+            formVerifyPwd.classList.remove('hidden'); // 이미 있으면 비밀번호 확인 폼
+          } else {
+            setPwdName.textContent = student.name;
+            formSetPwd.classList.remove('hidden'); // 없으면 설정 폼
+          }
+        } catch (error) {
+          showError('서버 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        } finally {
+          toggleLoading(btnIdDob, false, '다음 단계');
+        }
       } else {
         showError('입력하신 정보와 일치하는 학생을 찾을 수 없습니다.');
       }
     });
 
+    // 2단계: 새 비밀번호 설정
+    formSetPwd.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const pwd = inputNewPwd.value;
+      const confirm = inputConfirmPwd.value;
+
+      if (!pwd || pwd.length < 4) {
+        showError('비밀번호는 4자리 이상 입력해주세요.');
+        return;
+      }
+      if (pwd !== confirm) {
+        showError('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      hideError();
+      toggleLoading(btnSetPwd, true);
+
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=set&studentId=${tempStudent.id}&password=${encodeURIComponent(pwd)}`);
+        const data = await response.json();
+
+        if (data.success) {
+          showResult(tempStudent);
+        } else {
+          showError(data.message || '비밀번호 설정에 실패했습니다.');
+        }
+      } catch (error) {
+        showError('서버 통신 중 오류가 발생했습니다.');
+      } finally {
+        toggleLoading(btnSetPwd, false, '설정 후 확인');
+      }
+    });
+
+    // 3단계: 비밀번호 확인 (재접속시)
+    formVerifyPwd.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const pwd = inputVerifyPwd.value;
+
+      if (!pwd) {
+        showError('비밀번호를 입력해주세요.');
+        return;
+      }
+
+      hideError();
+      toggleLoading(btnVerifyPwd, true);
+
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=verify&studentId=${tempStudent.id}&password=${encodeURIComponent(pwd)}`);
+        const data = await response.json();
+
+        if (data.success && data.valid) {
+          showResult(tempStudent);
+        } else {
+          showError('비밀번호가 일치하지 않습니다.');
+        }
+      } catch (error) {
+        showError('서버 통신 중 오류가 발생했습니다.');
+      } finally {
+        toggleLoading(btnVerifyPwd, false, '성적 확인하기');
+      }
+    });
+
     // 로그아웃 처리
     logoutBtn.addEventListener('click', function() {
-      // 초기화
       inputId.value = '';
       inputDob.value = '';
-      hideError();
+      resetForms();
       
-      // 화면 전환
       resultSection.classList.add('hidden');
       loginSection.classList.remove('hidden');
       loginSection.classList.add('flex');
     });
 
-    // 에러 메시지 표시
-    function showError(message) {
-      errorText.textContent = message;
-      errorMsg.classList.remove('hidden');
-    }
-
-    // 에러 메시지 숨기기
-    function hideError() {
-      errorMsg.classList.add('hidden');
-    }
-
     // 성적 화면 표시
     function showResult(student) {
       hideError();
       
-      // 학생 정보 포맷팅 (예: 20401 -> 2학년 4반 1번)
       const grade = student.id.substring(0, 1);
       const classNum = student.id.substring(1, 3).replace(/^0+/, '');
       const studentNum = student.id.substring(3, 5).replace(/^0+/, '');
       
       studentInfo.textContent = `${grade}학년 ${classNum}반 ${studentNum}번 ${student.name} 학생`;
 
-      // 성적 데이터 입력
       sf1.textContent = student.f1;
       sf2.textContent = student.f2;
       sf3.textContent = student.f3;
       sfT.textContent = student.fT;
-      
       sr1.textContent = student.r1;
       sr2.textContent = student.r2;
       srT.textContent = student.rT;
 
-      // 화면 전환
       loginSection.classList.remove('flex');
       loginSection.classList.add('hidden');
       resultSection.classList.remove('hidden');
