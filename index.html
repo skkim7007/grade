@@ -16,7 +16,6 @@
 </head>
 <body class="bg-slate-100 min-h-screen font-sans">
 
-  <!-- 로그인 화면 -->
   <div id="login-section" class="min-h-screen flex items-center justify-center p-4">
     <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden border border-slate-200">
       <div class="bg-blue-600 p-8 text-center">
@@ -24,7 +23,7 @@
           <i data-lucide="award" class="text-blue-600 w-8 h-8"></i>
         </div>
         <h1 class="text-2xl font-bold text-white mb-2">영어 수행평가 성적조회</h1>
-        <p class="text-blue-100 text-sm">2026학년도 2학년 1학기</p>
+        <p class="text-blue-100 text-sm">2026학년도 3학년 1학기</p>
       </div>
 
       <div class="p-8">
@@ -33,7 +32,6 @@
           <span id="error-text">오류 메시지</span>
         </div>
 
-        <!-- 1. 학번/생년월일 확인 폼 -->
         <form id="form-id-dob" class="space-y-6">
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-2" for="studentId">
@@ -47,7 +45,7 @@
                 id="studentId"
                 type="text"
                 maxlength="5"
-                placeholder="예: 20401 (2학년 4반 1번)"
+                placeholder="예: 30101 (3학년 1반 1번)"
                 class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
               />
             </div>
@@ -65,7 +63,7 @@
                 id="studentDob"
                 type="text"
                 maxlength="8"
-                placeholder="예: 20120808"
+                placeholder="예: 20110809"
                 class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
               />
             </div>
@@ -80,7 +78,6 @@
           </button>
         </form>
 
-        <!-- 2. 비밀번호 설정 폼 (초기에는 숨김) -->
         <form id="form-set-pwd" class="space-y-6 hidden">
           <div class="text-center mb-6">
             <p class="text-sm text-slate-600">
@@ -141,7 +138,6 @@
           </div>
         </form>
 
-        <!-- 3. 비밀번호 확인 폼 (초기에는 숨김) -->
         <form id="form-verify-pwd" class="space-y-6 hidden">
           <div class="text-center mb-6">
             <p class="text-sm text-slate-600">
@@ -192,20 +188,17 @@
     </div>
   </div>
 
-  <!-- 성적 확인 화면 -->
   <div id="result-section" class="hidden min-h-screen p-4 md:p-8 flex justify-center items-start">
-    <div class="max-w-4xl w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200 mt-4 md:mt-10">
+    <div class="max-w-6xl w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200 mt-4 md:mt-10">
       
-      <!-- 헤더 섹션 -->
       <div class="bg-blue-600 p-6 text-white flex justify-between items-center">
         <div>
           <h1 class="text-2xl font-bold mb-1 flex items-center">
             <i data-lucide="book-open" class="mr-2 w-6 h-6"></i>
-            2026학년도 2학년 1학기 영어수행평가
+            2026학년도 3학년 1학기 영어수행평가
           </h1>
           <p id="student-info" class="text-blue-100 font-medium">
-            <!-- 학생 정보가 여기에 표시됩니다 -->
-          </p>
+            </p>
         </div>
         <button 
           id="logout-btn"
@@ -216,68 +209,95 @@
         </button>
       </div>
 
-      <!-- 성적표 섹션 -->
       <div class="p-6">
         <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm">
-          <table class="w-full text-center border-collapse min-w-[800px]">
+          <table class="w-full text-center border-collapse min-w-[1000px]">
             <thead>
               <tr class="bg-slate-100 text-slate-700">
-                <th colspan="4" class="border-b border-r border-slate-200 py-3 font-bold text-lg bg-indigo-50">
-                  축제 소개하기(20%)
+                <th colspan="7" class="border-b border-r border-slate-200 py-3 font-bold text-lg bg-indigo-50">
+                  위안이 되는 음식 소개하기(20%)
                 </th>
-                <th colspan="3" class="border-b border-slate-200 py-3 font-bold text-lg bg-emerald-50">
-                  한 학기 한 권 읽기(20%)
+                <th colspan="5" class="border-b border-slate-200 py-3 font-bold text-lg bg-emerald-50">
+                  1:1 인터뷰(20%)
                 </th>
               </tr>
-              <tr class="bg-slate-50 text-slate-600 text-sm">
-                <!-- 축제 소개하기 헤더 -->
-                <th class="border-b border-r border-slate-200 p-3 font-medium w-1/8">
-                  <div class="text-xs text-slate-400 mb-1">1단계</div>
-                  세계 여러 나라의<br/>축제 조사하기<br/>
-                  <span class="text-xs font-normal text-slate-500">(20/18/16/14)</span>
+              <tr class="bg-slate-50 text-slate-600 text-sm break-keep">
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">글쓰기</div>
+                  내용<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(20/18/16/14)</span>
                 </th>
-                <th class="border-b border-r border-slate-200 p-3 font-medium w-1/8">
-                  <div class="text-xs text-slate-400 mb-1">2단계</div>
-                  축제 소개글 작성하기<br/>
-                  <span class="text-xs font-normal text-slate-500">(40/38/../18)</span>
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">글쓰기</div>
+                  언어<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(10/9/8/7)</span>
                 </th>
-                <th class="border-b border-r border-slate-200 p-3 font-medium w-1/8">
-                  <div class="text-xs text-slate-400 mb-1">3단계</div>
-                  축제 소개하는 말하기<br/>
-                  <span class="text-xs font-normal text-slate-500">(40/30/20)</span>
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">모둠 인터뷰</div>
+                  심화인터뷰<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(15/12/9/6)</span>
                 </th>
-                <th class="border-b border-r border-slate-200 p-3 font-bold text-indigo-700 bg-indigo-50/50 w-1/8">
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">포스터 제작</div>
+                  포스터<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(25/20/15/10)</span>
+                </th>
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">발표하기</div>
+                  발표<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(20/18/16/14)</span>
+                </th>
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">동료/자기평가</div>
+                  평가<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(10/9/8)</span>
+                </th>
+                <th class="border-b border-r border-slate-200 p-2 font-bold text-indigo-700 bg-indigo-50/50 w-[8%]">
                   총점<br/>
-                  <span class="text-xs font-normal">(100)</span>
+                  <span class="text-[10px] font-normal">(100)</span>
                 </th>
                 
-                <!-- 한 학기 한 권 읽기 헤더 -->
-                <th class="border-b border-r border-slate-200 p-3 font-medium w-1/8">
-                  <div class="text-xs text-slate-400 mb-1">1단계</div>
-                  맥락 속 어휘 파악<br/>
-                  <span class="text-xs font-normal text-slate-500">(50/45/40/35/30)</span>
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">글쓰기</div>
+                  내용<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(20/18/16/14)</span>
                 </th>
-                <th class="border-b border-r border-slate-200 p-3 font-medium w-1/8">
-                  <div class="text-xs text-slate-400 mb-1">2단계</div>
-                  책 내용 이해<br/>
-                  <span class="text-xs font-normal text-slate-500">(50/45/40/35/30)</span>
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">글쓰기</div>
+                  언어사용<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(20/18/16/14/12)</span>
                 </th>
-                <th class="border-b border-slate-200 p-3 font-bold text-emerald-700 bg-emerald-50/50 w-1/8">
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">인터뷰</div>
+                  인터뷰<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(40/30/20)</span>
+                </th>
+                <th class="border-b border-r border-slate-200 p-2 font-medium w-[8%]">
+                  <div class="text-[11px] text-slate-400 mb-1">동료평가</div>
+                  학습지<br/>
+                  <span class="text-[10px] font-normal text-slate-500">(20/15/10)</span>
+                </th>
+                <th class="border-b border-slate-200 p-2 font-bold text-emerald-700 bg-emerald-50/50 w-[8%]">
                   총점<br/>
-                  <span class="text-xs font-normal">(100)</span>
+                  <span class="text-[10px] font-normal">(100)</span>
                 </th>
               </tr>
             </thead>
             <tbody class="text-slate-800 font-medium">
               <tr class="hover:bg-slate-50 transition-colors">
-                <td id="score-f1" class="border-r border-slate-200 p-4"></td>
-                <td id="score-f2" class="border-r border-slate-200 p-4"></td>
-                <td id="score-f3" class="border-r border-slate-200 p-4"></td>
-                <td id="score-fT" class="border-r border-slate-200 p-4 text-lg font-bold text-indigo-600 bg-indigo-50/20"></td>
+                <td id="score-f1" class="border-r border-slate-200 p-3"></td>
+                <td id="score-f2" class="border-r border-slate-200 p-3"></td>
+                <td id="score-f3" class="border-r border-slate-200 p-3"></td>
+                <td id="score-f4" class="border-r border-slate-200 p-3"></td>
+                <td id="score-f5" class="border-r border-slate-200 p-3"></td>
+                <td id="score-f6" class="border-r border-slate-200 p-3"></td>
+                <td id="score-fT" class="border-r border-slate-200 p-3 text-lg font-bold text-indigo-600 bg-indigo-50/20"></td>
                 
-                <td id="score-r1" class="border-r border-slate-200 p-4"></td>
-                <td id="score-r2" class="border-r border-slate-200 p-4"></td>
-                <td id="score-rT" class="p-4 text-lg font-bold text-emerald-600 bg-emerald-50/20"></td>
+                <td id="score-r1" class="border-r border-slate-200 p-3"></td>
+                <td id="score-r2" class="border-r border-slate-200 p-3"></td>
+                <td id="score-r3" class="border-r border-slate-200 p-3"></td>
+                <td id="score-r4" class="border-r border-slate-200 p-3"></td>
+                <td id="score-rT" class="p-3 text-lg font-bold text-emerald-600 bg-emerald-50/20"></td>
               </tr>
             </tbody>
           </table>
@@ -394,7 +414,66 @@
       { id: "20625", name: "표지원", dob: "20121221", f1: "20", f2: "36", f3: "30", fT: "86", r1: "30", r2: "45", rT: "75" },
       { id: "20626", name: "하소이", dob: "20121029", f1: "20", f2: "40", f3: "30", fT: "90", r1: "45", r2: "50", rT: "95" },
       { id: "20627", name: "하현아", dob: "20120407", f1: "20", f2: "40", f3: "30", fT: "90", r1: "50", r2: "50", rT: "100" },
-      { id: "20628", name: "황서희", dob: "20120309", f1: "20", f2: "40", f3: "40", fT: "100", r1: "45", r2: "50", rT: "95" }
+      { id: "20628", name: "황서희", dob: "20120309", f1: "20", f2: "40", f3: "40", fT: "100", r1: "45", r2: "50", rT: "95" },
+
+      // 3학년 1반
+      { id: "30101", name: "권민호", dob: "20110809", f1: "20", f2: "8", f3: "15", f4: "25", f5: "18", f6: "10", fT: "96", r1: "18", r2: "12", r3: "30", r4: "20", rT: "80" },
+      { id: "30102", name: "권승필", dob: "20110720", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30103", name: "김나경", dob: "20111119", f1: "20", f2: "10", f3: "12", f4: "25", f5: "20", f6: "10", fT: "97", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30104", name: "김서진", dob: "20110624", f1: "14", f2: "7", f3: "6", f4: "20", f5: "14", f6: "10", fT: "71", r1: "14", r2: "12", r3: "30", r4: "20", rT: "76" },
+      { id: "30105", name: "김성윤", dob: "20110907", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30106", name: "김아연", dob: "20110602", f1: "20", f2: "10", f3: "15", f4: "25", f5: "18", f6: "10", fT: "98", r1: "20", r2: "14", r3: "30", r4: "20", rT: "84" },
+      { id: "30107", name: "김은지", dob: "20110324", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30108", name: "김주환", dob: "20110523", f1: "20", f2: "10", f3: "15", f4: "25", f5: "18", f6: "10", fT: "98", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30109", name: "김지우", dob: "20111114", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30110", name: "문시온", dob: "20110914", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30111", name: "박민서", dob: "20110503", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30112", name: "박은세계", dob: "20110421", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30113", name: "배주성", dob: "20110906", f1: "20", f2: "10", f3: "12", f4: "25", f5: "20", f6: "10", fT: "97", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30114", name: "성지유", dob: "20111207", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30115", name: "송규원", dob: "20110606", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30116", name: "양서준", dob: "20110317", f1: "20", f2: "9", f3: "15", f4: "25", f5: "18", f6: "10", fT: "97", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30117", name: "유다은", dob: "20110906", f1: "20", f2: "9", f3: "15", f4: "25", f5: "18", f6: "10", fT: "97", r1: "20", r2: "14", r3: "20", r4: "20", rT: "74" },
+      { id: "30118", name: "윤정인", dob: "20110629", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30119", name: "이재호", dob: "20110511", f1: "20", f2: "9", f3: "12", f4: "25", f5: "14", f6: "10", fT: "90", r1: "20", r2: "14", r3: "20", r4: "20", rT: "74" },
+      { id: "30120", name: "이지민", dob: "20110607", f1: "20", f2: "9", f3: "12", f4: "25", f5: "18", f6: "10", fT: "94", r1: "20", r2: "18", r3: "20", r4: "20", rT: "78" },
+      { id: "30121", name: "장민기", dob: "20111007", f1: "20", f2: "9", f3: "12", f4: "25", f5: "20", f6: "10", fT: "96", r1: "18", r2: "14", r3: "40", r4: "20", rT: "92" },
+      { id: "30122", name: "장효주", dob: "20110224", f1: "20", f2: "9", f3: "15", f4: "25", f5: "18", f6: "10", fT: "97", r1: "20", r2: "16", r3: "20", r4: "20", rT: "76" },
+      { id: "30123", name: "정지훈", dob: "20111121", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30124", name: "차민서", dob: "20110803", f1: "20", f2: "9", f3: "15", f4: "25", f5: "14", f6: "10", fT: "93", r1: "20", r2: "14", r3: "20", r4: "20", rT: "74" },
+      { id: "30125", name: "최시준", dob: "20110206", f1: "20", f2: "10", f3: "15", f4: "25", f5: "18", f6: "10", fT: "98", r1: "14", r2: "12", r3: "40", r4: "20", rT: "86" },
+      { id: "30126", name: "최은서", dob: "20111114", f1: "20", f2: "9", f3: "15", f4: "25", f5: "14", f6: "10", fT: "93", r1: "20", r2: "14", r3: "20", r4: "20", rT: "74" },
+      { id: "30127", name: "허지우", dob: "20120106", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30128", name: "정의진", dob: "20110104", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+
+      // 3학년 2반
+      { id: "30201", name: "강민규", dob: "20110326", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30202", name: "강재후", dob: "20111216", f1: "20", f2: "9", f3: "15", f4: "25", f5: "18", f6: "10", fT: "97", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30203", name: "강희서", dob: "20110817", f1: "18", f2: "9", f3: "12", f4: "25", f5: "18", f6: "10", fT: "92", r1: "20", r2: "20", r3: "20", r4: "20", rT: "80" },
+      { id: "30204", name: "공다윤", dob: "20111125", f1: "20", f2: "8", f3: "15", f4: "25", f5: "20", f6: "10", fT: "98", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30205", name: "김규린", dob: "20110903", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30206", name: "김미서", dob: "20110112", f1: "20", f2: "9", f3: "15", f4: "25", f5: "18", f6: "10", fT: "97", r1: "20", r2: "18", r3: "20", r4: "20", rT: "78" },
+      { id: "30207", name: "김영준", dob: "20110205", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30208", name: "김태은", dob: "20110321", f1: "20", f2: "9", f3: "12", f4: "25", f5: "20", f6: "10", fT: "96", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30209", name: "김혜성", dob: "20111202", f1: "20", f2: "10", f3: "15", f4: "25", f5: "18", f6: "10", fT: "98", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30210", name: "배시연", dob: "20110816", f1: "20", f2: "10", f3: "12", f4: "25", f5: "18", f6: "10", fT: "95", r1: "20", r2: "18", r3: "30", r4: "20", rT: "88" },
+      { id: "30211", name: "백규민", dob: "20110604", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "20", r3: "30", r4: "20", rT: "90" },
+      { id: "30212", name: "윤나희", dob: "20110419", f1: "20", f2: "9", f3: "12", f4: "25", f5: "20", f6: "10", fT: "96", r1: "20", r2: "18", r3: "30", r4: "20", rT: "88" },
+      { id: "30213", name: "이유찬", dob: "20110103", f1: "20", f2: "9", f3: "12", f4: "25", f5: "20", f6: "10", fT: "96", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30214", name: "이주아", dob: "20110106", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30215", name: "이준희", dob: "20110629", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30216", name: "이지우", dob: "20110713", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "12", r3: "20", r4: "20", rT: "72" },
+      { id: "30217", name: "이지인", dob: "20110521", f1: "20", f2: "9", f3: "12", f4: "25", f5: "18", f6: "10", fT: "94", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30218", name: "이현진", dob: "20110508", f1: "20", f2: "10", f3: "15", f4: "25", f5: "18", f6: "10", fT: "98", r1: "14", r2: "12", r3: "20", r4: "20", rT: "66" },
+      { id: "30219", name: "임시후", dob: "20110427", f1: "20", f2: "8", f3: "12", f4: "25", f5: "18", f6: "10", fT: "93", r1: "20", r2: "16", r3: "20", r4: "20", rT: "76" },
+      { id: "30220", name: "장규언", dob: "20110406", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "18", r3: "20", r4: "20", rT: "78" },
+      { id: "30221", name: "조민규", dob: "20110730", f1: "20", f2: "10", f3: "12", f4: "25", f5: "20", f6: "10", fT: "97", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30222", name: "조민기", dob: "20110809", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" },
+      { id: "30223", name: "지승우", dob: "20110304", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "16", r3: "40", r4: "20", rT: "96" },
+      { id: "30224", name: "최민준", dob: "20111002", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30225", name: "하승현", dob: "20111210", f1: "20", f2: "10", f3: "15", f4: "25", f5: "20", f6: "10", fT: "100", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30226", name: "황이현", dob: "20110408", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "20", r3: "40", r4: "20", rT: "100" },
+      { id: "30227", name: "김시원", dob: "20110914", f1: "20", f2: "9", f3: "15", f4: "25", f5: "20", f6: "10", fT: "99", r1: "20", r2: "18", r3: "40", r4: "20", rT: "98" }
     ];
 
     // 상태 관리용 변수
@@ -430,9 +509,15 @@
     const sf1 = document.getElementById('score-f1');
     const sf2 = document.getElementById('score-f2');
     const sf3 = document.getElementById('score-f3');
+    const sf4 = document.getElementById('score-f4');
+    const sf5 = document.getElementById('score-f5');
+    const sf6 = document.getElementById('score-f6');
     const sfT = document.getElementById('score-fT');
+    
     const sr1 = document.getElementById('score-r1');
     const sr2 = document.getElementById('score-r2');
+    const sr3 = document.getElementById('score-r3');
+    const sr4 = document.getElementById('score-r4');
     const srT = document.getElementById('score-rT');
 
     // 숫자만 입력 가능하도록 제어
@@ -611,9 +696,15 @@
       sf1.textContent = student.f1;
       sf2.textContent = student.f2;
       sf3.textContent = student.f3;
+      sf4.textContent = student.f4;
+      sf5.textContent = student.f5;
+      sf6.textContent = student.f6;
       sfT.textContent = student.fT;
+      
       sr1.textContent = student.r1;
       sr2.textContent = student.r2;
+      sr3.textContent = student.r3;
+      sr4.textContent = student.r4;
       srT.textContent = student.rT;
 
       loginSection.classList.remove('flex');
