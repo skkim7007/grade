@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; max-width: 480px; margin: 0 auto; background-color: #f1f5f9; color: #1e293b; }
+      .container { background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+      h2 { text-align: center; color: #0f172a; margin-bottom: 24px; font-size: 20px; }
+      label { font-weight: bold; font-size: 13px; color: #475569; display: block; margin-top: 12px; }
+      input { width: 100%; padding: 12px; margin: 6px 0 14px 0; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
+      input:focus { border-color: #3b82f6; outline: none; }
+      .btn-primary { width: 100%; padding: 14px; background-color: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
+      .btn-primary:hover { background-color: #1d4ed8; }
+      
+      #result { margin-top: 25px; display: none; }
+      .student-name { text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #1e293b; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
+      th, td { padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0; }
+      th { background-color: #f8fafc; color: #64748b; font-weight: 600; }
+      .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 8px; display: flex; justify-content: space-around; text-align: center; }
+      .summary-item { flex: 1; }
+      .summary-label { font-size: 12px; color: #166534; font-weight: bold; }
+      .summary-value { font-size: 24px; font-weight: bold; margin-top: 4px; }
+      
+      /* 성취도 등급별 색상 정의 */
+      .grade-A { color: #16a34a; }
+      .grade-B { color: #2563eb; }
+      .grade-C { color: #ea580c; }
+      .grade-D { color: #dc2626; }
+      .grade-E { color: #991b1b; }
+      .error-text { color: #dc2626; text-align: center; font-weight: bold; padding: 10px; }
+      .loading-text { text-align: center; color: #64748b; font-style: italic; padding: 15px; }
 
+      /* 공유하기 섹션 디자인 */
+      .share-box { margin-top: 35px; padding-top: 20px; border-top: 1px dashed #cbd5e1; text-align: center; }
+      .share-label { font-size: 13px; color: #64748b; margin-bottom: 8px; display: block; }
+      .share-input-group { display: flex; align-items: center; }
+      .share-input-group input { margin: 0; border-radius: 6px 0 0 6px; border-right: none; background-color: #f8fafc; color: #94a3b8; font-size: 12px; }
+      .btn-copy { width: auto; margin: 0; border-radius: 0 6px 6px 0; padding: 12px 18px; background-color: #475569; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 13px; white-space: nowrap; }
+      .btn-copy:hover { background-color: #334155; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>영어 성적 및 성취도 조회</h2>
+      
+      <label for="studentId">학번</label>
+      <input type="number" id="studentId" placeholder="예: 20101" />
+      
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" placeholder="지정된 비밀번호 입력" />
+      
+      <button class="btn-primary" onclick="checkGrade()">확인하기</button>
+
+      <div id="result"></div>
+
+      <!-- 주소 공유하기 기능 추가 -->
+      <div class="share-box">
+        <span class="share-label">이 성적 조회 사이트 즐겨찾기/공유하기</span>
+        <div class="share-input-group">
+          <!-- 선생님의 웹 앱 URL이 여기에 들어갑니다 -->
+          <input type="text" id="appUrl" value="https://script.google.com/macros/s/AKfycbxEbCG46bRHWYREzNlZNJWuuvYIXCuP5lDM0gr9RiU6rCPUamNi6xk8Rz4As-XOGFLP/exec" readonly />
+          <button class="btn-copy" onclick="copyUrl()">주소 복사</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function checkGrade() {
+        var id = document.getElementById('studentId').value;
+        var pw = document.getElementById('password').value;
+
+        if(!id || !pw) {
+          alert('학번과 비밀번호를 모두 입력해주세요.');
+          return;
+        }
+
+        var resDiv = document.getElementById('result');
+        resDiv.style.display = 'block';
+        resDiv.innerHTML = '<div class="loading-text">성적 데이터를 가져오는 중입니다...</div>';
+
+        google.script.run.withSuccessHandler(showResult).getStudentGrade(id, pw);
+      }
+
+      function showResult(response) {
+        var resDiv = document.getElementById('result');
+        
+        if (response.success) {
+          var s = response.scores;
+          
+          resDiv.innerHTML = 
+            '<div class="student-name">' + response.name + ' 학생의 평가 결과</div>' +
+            '<table>' +
+            '  <thead>' +
+            '    <tr>' +
+            '      <th>평가 항목 (비율)</th>' +
+            '      <th>원점수</th>' +
+            '      <th>환산점</th>' +
+            '    </tr>' +
+            '  </thead>' +
+            '  <tbody>' +
+            '    <tr>' +
+            '      <td>중간고사 (30%)</td>' +
+            '      <td>' + s.mid.raw + '점</td>' +
+            '      <td>' + s.mid.weighted + '점</td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '      <td>기말고사 (30%)</td>' +
+            '      <td>' + s.final.raw + '점</td>' +
+            '      <td>' + s.final.weighted + '점</td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '      <td>축제 소개하기 (20%)</td>' +
+            '      <td>' + s.festival.raw + '점</td>' +
+            '      <td>' + s.festival.weighted + '점</td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '      <td>한학기 한권읽기 (20%)</td>' +
+            '      <td>' + s.reading.raw + '점</td>' +
+            '      <td>' + s.reading.weighted + '점</td>' +
+            '    </tr>' +
+            '  </tbody>' +
+            '</table>' +
+            '<div class="summary-box">' +
+            '  <div class="summary-item" style="border-right: 1px solid #bbf7d0; color: #15803d;">' +
+            '    <div class="summary-label">최종 환산 총점</div>' +
+            '    <div class="summary-value">' + response.total + '</div>' +
+            '  </div>' +
+            '  <div class="summary-item">' +
+            '    <div class="summary-label">성취도</div>' +
+            '    <div class="summary-value grade-' + response.grade + '">' + response.grade + '</div>' +
+            '  </div>' +
+            '</div>';
+        } else {
+          resDiv.innerHTML = '<div class="error-text">' + response.message + '</div>';
+        }
+      }
+
+      // 주소 복사 기능 스크립트
+      function copyUrl() {
+        var urlInput = document.getElementById("appUrl");
+        urlInput.select();
+        urlInput.setSelectionRange(0, 99999); // 모바일 기기 대응
+
+        navigator.clipboard.writeText(urlInput.value).then(function() {
+          alert("접속 주소가 복사되었습니다. 원하는 곳에 붙여넣기 하세요!");
+        }).catch(function(err) {
+          alert("복사에 실패했습니다. 주소창의 링크를 직접 복사해주세요.");
+        });
+      }
+    </script>
+  </body>
+</html>
